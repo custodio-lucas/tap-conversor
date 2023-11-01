@@ -1,7 +1,8 @@
 {
   "streams": [
     {
-      "tap_stream_id": "last",
+      "stream_alias": "Last",
+      "tap_stream_id": "Last",
       "key_properties": [],
       "schema": {
         "properties": {
@@ -78,10 +79,19 @@
         ]
       },
       "stream": "last",
-      "metadata": []
+      "metadata": [
+        {
+          "metadata": {
+            "selected": true,
+            "table-key-properties": []
+          },
+          "breadcrumb": []
+        }
+      ]
     },
     {
-      "tap_stream_id": "daily",
+      "stream_alias": "Daily",
+      "tap_stream_id": "Daily",
       "key_properties": [],
       "schema": {
         "properties": {
@@ -158,7 +168,15 @@
         ]
       },
       "stream": "daily",
-      "metadata": []
+      "metadata": [
+        {
+          "metadata": {
+            "selected": true,
+            "table-key-properties": []
+          },
+          "breadcrumb": []
+        }
+      ]
     }
   ]
 }

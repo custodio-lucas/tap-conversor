@@ -5,9 +5,10 @@ import singer
 from singer import utils
 from singer.catalog import Catalog, CatalogEntry
 from singer.schema import Schema
+from tap_conversor.conversorAPI import ConversorAPI
 
 
-REQUIRED_CONFIG_KEYS = ["start_date", "username", "password"]
+REQUIRED_CONFIG_KEYS = ["currency", "start_date", "end_date"]
 LOGGER = singer.get_logger()
 
 
@@ -63,30 +64,37 @@ def sync(config, state, catalog):
 
         singer.write_schema(
             stream_name=stream.tap_stream_id,
-            schema=stream.schema,
+            schema=stream.schema.to_dict(),
             key_properties=stream.key_properties,
         )
 
         # TODO: delete and replace this inline function with your own data retrieval process: # noqa: E501
-        tap_data = lambda: [
-            {"id": x, "name": "row${x}"} for x in range(1000)
-        ]  # noqa: E731, E501
+        tap_data = ConversorAPI(config).sync(stream.stream)  # noqa: E731, E501
 
         max_bookmark = None
-        for row in tap_data():
-            # TODO: place type conversions or transformations here
-
-            # write one or more rows to the stream:
-            singer.write_records(stream.tap_stream_id, [row])
+        if stream.stream == 'last':
+            final_tap_data = []
+            final_tap_data.append(tap_data()['USDBRL'])
+            singer.write_records(stream.tap_stream_id, final_tap_data)
             if bookmark_column:
                 if is_sorted:
                     # update bookmark to latest value
                     singer.write_state(
-                        {stream.tap_stream_id: row[bookmark_column]}
+                        {stream.tap_stream_id: tap_data()[bookmark_column]}
                     )  # noqa: E501
                 else:
-                    # if data unsorted, save max value until end of writes
-                    max_bookmark = max(max_bookmark, row[bookmark_column])
+                    max_bookmark = max(max_bookmark, tap_data()[bookmark_column])
+        
+        else:
+            for row in tap_data():
+                singer.write_records(stream.tap_stream_id, [row])
+                if bookmark_column:
+                    if is_sorted:
+                        singer.write_state(
+                            {stream.tap_stream_id: row[bookmark_column]}
+                        )
+                    else:
+                        max_bookmark = max(max_bookmark, row[bookmark_column])
         if bookmark_column and not is_sorted:
             singer.write_state({stream.tap_stream_id: max_bookmark})
     return

@@ -1,5 +1,5 @@
 {
-  "username": "my_username",
-  "password": "my_password",
-  "start_date": "2017-01-01T00:00:00Z"
+  "currency": "USD-BRL",
+  "start_date": "20180901",
+  "end_date": "20200902"
 }
