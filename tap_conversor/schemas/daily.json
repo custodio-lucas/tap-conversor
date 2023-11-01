@@ -1,0 +1,75 @@
+{
+	"type": [
+		"object",
+		"null"
+	],
+	"required": [],
+	"properties": {
+		"varBid": {
+			"type": [
+				"string",
+				"null"
+			]
+		},
+		"code": {
+			"type": [
+				"string",
+				"null"
+			]
+		},
+		"codein": {
+			"type": [
+				"string",
+				"null"
+			]
+		},
+		"name": {
+			"type": [
+				"string",
+				"null"
+			]
+		},
+		"high": {
+			"type": [
+				"string",
+				"null"
+			]
+		},
+		"low": {
+			"type": [
+				"string",
+				"null"
+			]
+		},
+		"pctChange": {
+			"type": [
+				"string",
+				"null"
+			]
+		},
+		"bid": {
+			"type": [
+				"string",
+				"null"
+			]
+		},
+		"ask": {
+			"type": [
+				"string",
+				"null"
+			]
+		},
+		"timestamp": {
+			"type": [
+				"string",
+				"null"
+			]
+		},
+		"create_date": {
+			"type": [
+				"string",
+				"null"
+			]
+		}
+	}
+}
