@@ -2,9 +2,9 @@
 
 Now that the project exists, make a virtual environment:
 ```bash
-$ cd tap-foobar
-$ python3 -m venv ~/.virtualenvs/tap-foobar
-$ source ~/.virtualenvs/tap-foobar/bin/activate
+$ cd tap-conversor
+$ python3 -m venv ~/.virtualenvs/tap-conversor
+$ source ~/.virtualenvs/tap-conversor/bin/activate
 ```
 Install the package:
 ```bash
@@ -13,58 +13,200 @@ $ pip install -e .
 
 And invoke the tap in discovery mode to get the catalog:
 ```bash
-$ tap-foobar -c sample_config.json --discover
+$ tap-conversor -c sample_config.json --discover
+```
+Or, if you prefer to save this file in the catalogs directory, use the following command;
+```bash
+$ tap-conversor -c sample_config.json --discover > tap_conversor/catalogs/catalog.json
 ```
 The output should be a catalog with the single sample stream (from the schemas folder):
 ```bash
 {
   "streams": [
     {
-      "metadata": [],
+      "stream_alias": "Last",
+      "tap_stream_id": "Last",
+      "key_properties": [],
       "schema": {
-        "additionalProperties": false,
         "properties": {
-          "string_field": {
+          "code": {
             "type": [
-              "null",
-              "string"
+              "string",
+              "null"
             ]
           },
-          "datetime_field": {
+          "codein": {
             "type": [
-              "null",
-              "string"
-            ],
-            "format": "date-time"
-          },
-          "double_field": {
-            "type": [
-              "null",
-              "number"
+              "string",
+              "null"
             ]
           },
-          "integer_field": {
+          "name": {
             "type": [
-              "null",
-              "integer"
+              "string",
+              "null"
+            ]
+          },
+          "high": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "low": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "varBid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pctChange": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "bid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ask": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "timestamp": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "create_date": {
+            "type": [
+              "string",
+              "null"
             ]
           }
         },
         "type": [
-          "null",
-          "object"
+          "object",
+          "null"
         ]
       },
-      "stream": "sample_stream",
+      "stream": "last",
+      "metadata": [
+        {
+          "metadata": {
+            "selected": true,
+            "table-key-properties": []
+          },
+          "breadcrumb": []
+        }
+      ]
+    },
+    {
+      "stream_alias": "Daily",
+      "tap_stream_id": "Daily",
       "key_properties": [],
-      "tap_stream_id": "sample_stream"
+      "schema": {
+        "properties": {
+          "varBid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "code": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "codein": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "high": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "low": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pctChange": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "bid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ask": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "timestamp": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "create_date": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "type": [
+          "object",
+          "null"
+        ]
+      },
+      "stream": "daily",
+      "metadata": [
+        {
+          "metadata": {
+            "selected": true,
+            "table-key-properties": []
+          },
+          "breadcrumb": []
+        }
+      ]
     }
   ]
 }
 ```
 If this catalog is saved to a `catalog.json` file, it can be passed back into the tap in sync mode:
 ```
-tap-foobar -c sample_config.json --properties catalog.json
+tap-conversor -c sample_config.json --catalog tap_conversor/catalogs/catalog.json
 ```
 
 Now you build the tap!
@@ -73,12 +215,6 @@ Now you build the tap!
 
 Before testing the Tap we need to generate all catalogs that will be validated during the tests, 
 make sure to create and commit all catalogs.
-
-Create one catalog for one stream.
-```
-tap-conversor -c sample_config.json --discover > tap_conversor/catalogs/sample_catalog.json
-```
-
 With everything created, run:
 ```
 make test
